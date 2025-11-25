@@ -2,34 +2,33 @@ import ast
 import re
 
 def molecule_data_parser(filepath):
-    keys = [ "verbose", "basis", "spin","charge", "symmetry", "atom"]
-    data= {}
-    
-    with open (filepath, 'r') as f:
-        lines = f.read()
-        for key in keys:
-            if key in lines:
-                try:
-                    pattern = rf"{key}\s*=\s*(.*?)(?=\n\w+\s*=|\Z)"
-                    match = re.search(pattern, lines, re.DOTALL)
-                    if match:
-                        value = match.group(1).strip()
-                        data[key] = ast.literal_eval(value)
-                       
+    keys = ["verbose", "basis", "spin", "charge", "symmetry", "atom"]
+    data = {}
 
-                except Exception as e:
-                    raise ValueError(
-                        f"FIle format error - check {key}, unable to parse value {value}\n"
-                        f"{e}"
-                        )
-    return (
-            data.get("verbose"),
-            data.get("basis"),
-            data.get("spin"),
-            data.get("charge"),
-            data.get("symmetry"),
-            data.get("atom")
-)
+    with open(filepath, 'r') as f:
+        content = f.read()
 
+    for key in keys:
+        pattern = rf"^\s*{key}\s*=\s*(.*?)(?=^\s*\w+\s*=|\Z)"
+        match = re.search(pattern, content, flags=re.DOTALL | re.MULTILINE)
+
+        if not match:
+            # No key found — return None or raise error?
+            data[key] = None
+            continue
+
+        raw_value = match.group(1).strip()
+
+        try:
+            # Try python literal parsing
+            value = ast.literal_eval(raw_value)
+        except Exception:
+            # fallback: treat as a raw string
+            value = raw_value
+
+        data[key] = value
+
+    return tuple(data[k] for k in keys)
 
 
+print(molecule_data_parser("test.txt"))
