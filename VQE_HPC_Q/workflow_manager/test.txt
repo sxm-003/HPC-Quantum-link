@@ -1,0 +1,6 @@
+verbose=0,
+atom=[["Li", (0, 0, 0)], ["H", (0, 0, 1.56)]],
+basis="sto-6g",
+spin=0,
+charge=0,
+symmetry="Coov",
