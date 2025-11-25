@@ -1,7 +1,7 @@
 from molecule_data_extractor import molecule_data_parser as mdp
 from pyscf import gto
 
-def orchestration_handler(filepath):
+def basis_size_estimator(filepath):
     mol_spec = mdp(filepath)
 
     atoms = mol_spec["atom"]
@@ -35,5 +35,25 @@ def orchestration_handler(filepath):
     return mol.nao  # number of basis functions
 
 
+def HPC_local_selector(filepath,threshold = 80):
+    complexity = basis_size_estimator(filepath)
+    if complexity < threshold:
+        print("Recommending to use Local system for building Hamiltonian")
+        prefer_mode = "local" 
+    else:
+        print("Recommending to use HPC for building Hamiltonian")
+        prefer_mode = "hpc"
+    mode = input(f"Choose backend [local/hpc] (recommended: {prefer_mode}): ").strip().lower()
+    if mode not in ["local", "hpc"]:
+        mode = prefer_mode
+    return mode
 
+def SLURM_script_initiator1():
+    return None
+def Hamiltonian_builder_orchestrator(filepath):
+
+   return None
+
+
+print(HPC_local_selector("test.txt"))
 
