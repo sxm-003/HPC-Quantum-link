@@ -1,7 +1,7 @@
 from molecule_data_extractor import molecule_data_parser as mdp
 from pyscf import gto
 
-def basis_size_estimator(filepath):
+def molecule_builder(filepath):
     mol_spec = mdp(filepath)
 
     atoms = mol_spec["atom"]
@@ -32,11 +32,12 @@ def basis_size_estimator(filepath):
 
     mol.build()
 
-    return mol.nao  # number of basis functions
+    return mol # number of basis functions
 
 
 def HPC_local_selector(filepath,threshold = 80):
-    complexity = basis_size_estimator(filepath)
+    mol = molecule_builder(filepath)
+    complexity = mol.nao
     if complexity < threshold:
         print("Recommending to use Local system for building Hamiltonian")
         prefer_mode = "local" 
@@ -54,6 +55,4 @@ def Hamiltonian_builder_orchestrator(filepath):
 
    return None
 
-
-print(HPC_local_selector("test.txt"))
 
