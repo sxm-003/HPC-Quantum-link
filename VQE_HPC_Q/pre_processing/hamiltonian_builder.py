@@ -92,7 +92,7 @@ def Hamiltonian_builder(filepath):
  
     mx = mcscf.CASCI(mf, ncas=5, nelecas=(1, 1))
     cas_space_symmetry = {"A1": 3, "E1x": 1, "E1y": 1}
-    mo = mcscf.sort_mo_by_irrep(mx, mf.mo_coeff, cas_space_symmetry)
+    mo = mf.mo_coeff
     E2 = mx.kernel(mo)[:2]
     h1e, ecore = mx.get_h1eff()
     h2e = ao2mo.restore(1, mx.get_h2eff(), mx.ncas)
@@ -101,4 +101,4 @@ def Hamiltonian_builder(filepath):
 
     return H
 
-Hamiltonian_builder("test.txt")
+Hamiltonian_builder("pre_processing/test.txt")

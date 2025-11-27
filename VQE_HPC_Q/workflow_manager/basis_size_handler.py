@@ -1,4 +1,4 @@
-from molecule_data_extractor import molecule_data_parser as mdp
+from workflow_manager.molecule_data_extractor import molecule_data_parser as mdp
 from pyscf import gto
 
 def molecule_builder(filepath):
