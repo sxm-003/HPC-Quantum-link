@@ -1,5 +1,6 @@
 from workflow_manager.molecule_data_extractor import molecule_data_parser as mdp
 from pyscf import gto
+import subprocess
 
 def molecule_builder(filepath):
     mol_spec = mdp(filepath)
@@ -23,6 +24,7 @@ def molecule_builder(filepath):
         )
     else:
         mol = gto.M(
+
             atom=geom,
             basis=basis,
             charge=charge,
@@ -49,7 +51,9 @@ def HPC_local_selector(filepath,threshold = 80):
         mode = prefer_mode
     return mode
 
-def SLURM_script_initiator1():
+def SLURM_script_initiator1(job):
+
+    
     return None
 def Hamiltonian_builder_orchestrator(filepath):
 
